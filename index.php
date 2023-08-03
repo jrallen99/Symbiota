@@ -76,9 +76,9 @@ header("Content-Type: text/html; charset=".$CHARSET);
 			<p>
 			While the primary mission of the portal is to bring together collections from within the Southern Rocky Mountain Region, we are also working to facilitate contributions 
 			of data from the Southern Rockies by collections from outside of the region. Digitization within the Consortium of Southern Rocky Mountain Herbaria, is currently funded by an ADBC TCN 
-			project with the goal of bringing together roughly 1.7 million specimens from the greater Southern Rocky Mountain region.  Data come from a combination of existing and newly digitized 
+			project with the goal of bringing together roughly 1.8 million specimens from the greater Southern Rocky Mountain region.  Data come from a combination of existing and newly digitized 
 			collections. The SoRo TCN is a collaborative effort across the Consortium of Southern Rocky Mountain Herbaria, the New England Vascular Plant Network  (BRU, HUH, YU), the 
-			Northern Great Plains Herbaria (BHSC, CSCN), the Arizona-New Mexico Network (ASC, ASU, NAVA, SJNM, UNM) and the Mid-Atlantic Network (NY). 
+			Northern Great Plains Herbaria (BHSC, CSCN), the Arizona-New Mexico Network (ASC, ASU, NAVA, SJNM, UNM), the Consortium of California Herbaria (RSA) and the Mid-Atlantic Network (NY). 
 		</div>
 	</div>
 	<?php
