@@ -15,7 +15,7 @@ header("Content-Type: text/html; charset=".$charset);
 </head>
 <body>
 	<?php
-	include($serverRoot."/header.php");
+	include($serverRoot.'/includes/header.php');
 	?> 
         <!-- This is inner text! -->
         <div  id="innertext">
@@ -45,7 +45,7 @@ header("Content-Type: text/html; charset=".$charset);
         </div>
 
 	<?php
-	include($serverRoot."/footer.php");
+	include($serverRoot.'/includes/footer.php');
 	?> 
 
 </body>
