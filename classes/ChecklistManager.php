@@ -23,6 +23,7 @@ class ChecklistManager extends Manager{
 	private $limitImagesToVouchers = false;
 	private $showVouchers = false;
 	private $showAlphaTaxa = false;
+	private $showSubgenera = false;
 	private $searchCommon = false;
 	private $searchSynonyms = true;
 	private $filterArr = array();
@@ -47,19 +48,22 @@ class ChecklistManager extends Manager{
 			$this->clid = $clid;
 			$this->setMetaData();
 			//Get children checklists
-			$sqlBase = 'SELECT ch.clidchild, cl2.name '.
-				'FROM fmchecklists cl INNER JOIN fmchklstchildren ch ON cl.clid = ch.clid '.
-				'INNER JOIN fmchecklists cl2 ON ch.clidchild = cl2.clid '.
-				'WHERE (cl2.type != "excludespp") AND cl.clid IN(';
+			$sqlBase = 'SELECT ch.clidchild, cl2.name
+				FROM fmchecklists cl INNER JOIN fmchklstchildren ch ON cl.clid = ch.clid
+				INNER JOIN fmchecklists cl2 ON ch.clidchild = cl2.clid
+				WHERE (cl2.type != "excludespp") AND (ch.clid != ch.clidchild) AND cl.clid IN(';
 			$sql = $sqlBase.$this->clid.')';
+			$cnt = 0;
 			do{
-				$childStr = "";
+				$childStr = '';
 				$rsChild = $this->conn->query($sql);
 				while($r = $rsChild->fetch_object()){
 					$this->childClidArr[$r->clidchild] = $r->name;
 					$childStr .= ','.$r->clidchild;
 				}
 				$sql = $sqlBase.substr($childStr,1).')';
+				$cnt++;
+				if($cnt > 20) break;
 			}while($childStr);
 		}
 	}
@@ -145,7 +149,7 @@ class ChecklistManager extends Manager{
 	public function getParentChecklist(){
 		$parentArr = array();
 		if($this->clid){
-			$sql = 'SELECT cl.clid, cl.name FROM fmchecklists cl INNER JOIN fmchklstchildren ch ON cl.clid = ch.clid WHERE ch.clidchild = '.$this->clid;
+			$sql = 'SELECT cl.clid, cl.name FROM fmchecklists cl INNER JOIN fmchklstchildren ch ON cl.clid = ch.clid WHERE ch.clid != ch.clidchild AND ch.clidchild = ' . $this->clid;
 			$rs = $this->conn->query($sql);
 			if($r = $rs->fetch_object()){
 				$parentArr[$r->clid] = $r->name;
@@ -321,6 +325,12 @@ class ChecklistManager extends Manager{
 				}
 				$rs->free();
 			}
+			if($this->showSubgenera){
+				$this->setSubgenera();
+				uasort($this->taxaList, function($a, $b) {
+					return $a['sciname'] <=> $b['sciname'];
+				});
+			}
 		}
 		return $this->taxaList;
 	}
@@ -417,6 +427,20 @@ class ChecklistManager extends Manager{
 		}
 	}
 
+	private function setSubgenera(){
+		$sql = 'SELECT DISTINCT l.tid, t.sciname, p.sciname as parent
+			FROM fmchklsttaxalink l INNER JOIN taxaenumtree e ON l.tid = e.tid
+			INNER JOIN taxa t ON l.tid = t.tid
+			INNER JOIN taxa p ON e.parenttid = p.tid
+			WHERE e.taxauthid = 1 AND p.rankid = 190 AND l.tid IN('.implode(',',array_keys($this->taxaList)).')';
+		if($rs = $this->conn->query($sql)){
+			while($r = $rs->fetch_object()){
+				if(!strpos($r->sciname, '(')) $this->taxaList[$r->tid]['sciname'] = $r->parent . substr($this->taxaList[$r->tid]['sciname'], strpos($this->taxaList[$r->tid]['sciname'], ' '));
+			}
+			$rs->free();
+		}
+	}
+
 	public function getVoucherCoordinates($limit=0){
 		$retArr = array();
 		if(!$this->basicSql) $this->setClSql();
@@ -484,7 +508,7 @@ class ChecklistManager extends Manager{
 					$sql .= 'INNER JOIN omoccurpoints p ON o.occid = p.occid WHERE (ST_Within(p.point,GeomFromText("'.$this->clMetadata['footprintwkt'].'"))) ';
 				}
 				else{
-					$voucherManager = new ChecklistVoucherAdmin($this->conn);
+					$voucherManager = new ChecklistVoucherAdmin();
 					$voucherManager->setClid($this->clid);
 					$voucherManager->setCollectionVariables();
 					$sql .= 'WHERE ('.$voucherManager->getSqlFrag().') ';
@@ -773,6 +797,10 @@ class ChecklistManager extends Manager{
 
 	public function setShowAlphaTaxa($bool){
 		if($bool) $this->showAlphaTaxa = true;
+	}
+
+	public function setShowSubgenera($bool){
+		if($bool) $this->showSubgenera = true;
 	}
 
 	public function setSearchCommon($bool){
