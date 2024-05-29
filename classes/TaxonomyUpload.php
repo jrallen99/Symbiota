@@ -7,10 +7,10 @@ include_once($SERVER_ROOT.'/classes/OccurrenceMaintenance.php');
 class TaxonomyUpload{
 
 	private $conn;
-	private $uploadFileName;
-	private $uploadTargetPath;
+	private $uploadFileName = '';
+	private $uploadTargetPath = '';
 	private $taxAuthId = 1;
-	private $kingdomName;
+	private $kingdomName = '';
 	private $kingdomTid;
 	private $taxonUnitArr = array();
 	private $statArr = array();
@@ -24,8 +24,7 @@ class TaxonomyUpload{
 		$this->conn = MySQLiConnectionFactory::getCon("write");
  		$this->setUploadTargetPath();
  		set_time_limit(3000);
-		ini_set("max_input_time",120);
-  		ini_set('auto_detect_line_endings', true);
+		ini_set('max_input_time', 120);
 	}
 
 	function __destruct(){
@@ -1073,7 +1072,7 @@ class TaxonomyUpload{
 			$sql = 'UPDATE IGNORE taxa t INNER JOIN taxaenumtree e ON t.tid = e.tid
 				INNER JOIN taxa k ON e.parenttid = k.tid
 				SET t.kingdomname = k.sciname
-				WHERE t.kingdomname IS NULL AND k.rankid = 10;';
+				WHERE t.kingdomname = "" AND k.rankid = 10;';
 			if(!$this->conn->query($sql)){
 				$this->outputMsg('ERROR updating kingdomName within taxa table: '.$this->conn->error,1);
 			}
