@@ -1,27 +1,36 @@
 <?php
-//error_reporting(E_ALL);
-include_once("config/symbini.php");
-header("Content-Type: text/html; charset=".$charset);
+include_once('config/symbini.php');
+header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="X-Frame-Options" content="deny">
-	<title><?php echo $defaultTitle?> Digitization</title>
-	<link href="css/base.css?<?php echo $CSS_VERSION; ?>" type="text/css" rel="stylesheet" />
-	<link href="css/main.css?<?php echo $CSS_VERSION; ?>" type="text/css" rel="stylesheet" />
+	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
+	<?php
+	include_once($SERVER_ROOT.'/includes/head.php');
+	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
+	?>
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/quicksearch.css" type="text/css" rel="Stylesheet" />
+	<script src="js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="js/jquery-ui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		<?php include_once('config/googleanalytics.php'); ?>
+		var clientRoot = "<?php echo $CLIENT_ROOT; ?>";
 	</script>
+	<script src="js/symb/api.taxonomy.taxasuggest.js" type="text/javascript"></script>
+	<script src="<?PHP echo $CLIENT_ROOT; ?>/js/jquery.slides.js"></script>
 </head>
 <body>
 	<?php
 	include($SERVER_ROOT.'/includes/header.php');
 	?> 
         <!-- This is inner text! -->
-        <div  id="innertext">
+		<div class="navpath"></div>
+        <main  id="innertext">
             <h1></h1>
 
-            <div style="padding: 0px 10px;">
+            <div>
 <h2><strong>Digitization Workflows</strong><p></h2>
 
 <strong>University of Colorado</strong><p>
@@ -42,7 +51,7 @@ header("Content-Type: text/html; charset=".$charset);
 
            
             </div>
-        </div>
+</main>
 
 	<?php
 	include($SERVER_ROOT.'/includes/footer.php');

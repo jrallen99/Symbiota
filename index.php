@@ -1,8 +1,11 @@
 <?php
-include_once("config/symbini.php");
-header("Content-Type: text/html; charset=".$CHARSET);
+include_once('config/symbini.php');
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/templates/index.en.php');
+else include_once($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php');
+header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="X-Frame-Options" content="deny">
 	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
@@ -12,8 +15,8 @@ header("Content-Type: text/html; charset=".$CHARSET);
 	?>
 	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<link href="<?php echo $CSS_BASE_PATH; ?>/quicksearch.css" type="text/css" rel="Stylesheet" />
-	<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-	<script src="js/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="js/jquery-ui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var clientRoot = "<?php echo $CLIENT_ROOT; ?>";
 	</script>
@@ -25,7 +28,8 @@ header("Content-Type: text/html; charset=".$CHARSET);
 	include($SERVER_ROOT.'/includes/header.php');
 	?> 
 	<!-- This is inner text! -->
-	<div  id="innertext">
+	<div class="navpath"></div>
+	<main  id="innertext">
 		<div style="float:right;margin-left:15px;">
 			<div id="quicksearchdiv">
 				<!-- -------------------------QUICK SEARCH SETTINGS--------------------------------------- -->
@@ -68,7 +72,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
 			</div>
 		</div>
 		<h1>Welcome to the Consortium of Southern Rocky Mountain Herbaria</h1>
-		<div style="padding: 0px 10px; font-size:140%">
+		<p>
 			The Consortium of Southern Rocky Mountain Herbaria consists of collections from the Middle and Southern Rocky Mountain States including Colorado, Idaho, Montana and Wyoming. 
 			The rugged and expansive terrain of the Southern Rocky Mountains (SoRo) supports plant species of different geographic origins, evolutionary histories, and ecological affinities. 
 			Species from the high peaks and adjacent high plains grow in varied habitats and represent neither the most biodiverse nor most endemic flora in the United States, 
@@ -79,8 +83,8 @@ header("Content-Type: text/html; charset=".$CHARSET);
 			project with the goal of bringing together roughly 1.8 million specimens from the greater Southern Rocky Mountain region.  Data come from a combination of existing and newly digitized 
 			collections. The SoRo TCN is a collaborative effort across the Consortium of Southern Rocky Mountain Herbaria, the New England Vascular Plant Network  (BRU, HUH, YU), the 
 			Northern Great Plains Herbaria (BHSC, CSCN), the Arizona-New Mexico Network (ASC, ASU, NAVA, SJNM, UNM), the Consortium of California Herbaria (RSA) and the Mid-Atlantic Network (NY). 
-		</div>
-	</div>
+		</p>
+	</main>
 	<?php
 	include($SERVER_ROOT.'/includes/footer.php');
 	?> 
