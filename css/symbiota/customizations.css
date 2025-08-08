@@ -27,6 +27,10 @@ This stylesheet is defined last and will override all previously loaded sheets. 
     color: white;
 }
 
+.button-secondary {
+    color: white;
+}
+
 .button-tertiary > a {
     color: var(--bright-color);
 }
