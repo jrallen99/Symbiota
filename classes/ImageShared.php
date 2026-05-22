@@ -153,77 +153,81 @@ class ImageShared {
 		$this->errArr = array();
 	}
 
-	public function uploadImage($imgFile = 'imgfile') {
-		if ($this->targetPath) {
-			if (file_exists($this->targetPath)) {
-				$imgFileName = basename($_FILES[$imgFile]['name']);
-				$fileName = $this->cleanFileName($imgFileName);
-				if (move_uploaded_file($_FILES[$imgFile]['tmp_name'], $this->targetPath . $fileName . $this->imgExt)) {
-					$this->sourcePath = $this->targetPath . $fileName . $this->imgExt;
-					$this->imgName = $fileName;
-					if ($this->testOrientation) $this->evaluateOrientation();
-					return true;
-				} else {
-					$this->errArr[] = 'FATAL ERROR: unable to move image to target from ' . $_FILES[$imgFile]['tmp_name'] . '(' . $this->targetPath . $fileName . $this->imgExt . ')';
-				}
-			} else {
-				$this->errArr[] = 'FATAL ERROR: Target path does not exist in uploadImage method (' . $this->targetPath . ')';
-				//trigger_error('Path does not exist in uploadImage method',E_USER_ERROR);
-			}
-		} else {
-			$this->errArr[] = 'FATAL ERROR: Path NULL in uploadImage method';
-			//trigger_error('Path NULL in uploadImage method',E_USER_ERROR);
-		}
-		return false;
-	}
+	// TODO (Logan) deprecate function
+	// commenting out as instructed
+	// public function uploadImage($imgFile = 'imgfile') {
+	// 	if ($this->targetPath) {
+	// 		if (file_exists($this->targetPath)) {
+	// 			$imgFileName = basename($_FILES[$imgFile]['name']);
+	// 			$fileName = $this->cleanFileName($imgFileName);
+	// 			if (move_uploaded_file($_FILES[$imgFile]['tmp_name'], $this->targetPath . $fileName . $this->imgExt)) {
+	// 				$this->sourcePath = $this->targetPath . $fileName . $this->imgExt;
+	// 				$this->imgName = $fileName;
+	// 				if ($this->testOrientation) $this->evaluateOrientation();
+	// 				return true;
+	// 			} else {
+	// 				$this->errArr[] = 'FATAL ERROR: unable to move image to target from ' . $_FILES[$imgFile]['tmp_name'] . '(' . $this->targetPath . $fileName . $this->imgExt . ')';
+	// 			}
+	// 		} else {
+	// 			$this->errArr[] = 'FATAL ERROR: Target path does not exist in uploadImage method (' . $this->targetPath . ')';
+	// 			//trigger_error('Path does not exist in uploadImage method',E_USER_ERROR);
+	// 		}
+	// 	} else {
+	// 		$this->errArr[] = 'FATAL ERROR: Path NULL in uploadImage method';
+	// 		//trigger_error('Path NULL in uploadImage method',E_USER_ERROR);
+	// 	}
+	// 	return false;
+	// }
 
-	public function copyImageFromUrl() {
-		//Returns full path
-		if (!$this->sourceUrl) {
-			$this->errArr[] = 'FATAL ERROR: Image source uri NULL in copyImageFromUrl method';
-			//trigger_error('Image source uri NULL in copyImageFromUrl method',E_USER_ERROR);
-			return false;
-		}
-		if (!$this->uriExists($this->sourceUrl)) {
-			$this->errArr[] = 'FATAL ERROR: Image source file (' . $this->sourceUrl . ') does not exist in copyImageFromUrl method';
-			//trigger_error('Image source file ('.$sourceUri.') does not exist in copyImageFromUrl method',E_USER_ERROR);
-			return false;
-		}
-		if (!$this->targetPath) {
-			$this->errArr[] = 'FATAL ERROR: Image target url NULL in copyImageFromUrl method';
-			//trigger_error('Image target url NULL in copyImageFromUrl method',E_USER_ERROR);
-			return false;
-		}
-		if (!file_exists($this->targetPath)) {
-			$this->errArr[] = 'FATAL ERROR: Image target file (' . $this->targetPath . ') does not exist in copyImageFromUrl method';
-			//trigger_error('Image target file ('.$this->targetPath.') does not exist in copyImageFromUrl method',E_USER_ERROR);
-			return false;
-		}
-		//Clean and copy file
-		$fileName = $this->cleanFileName($this->sourceUrl);
-		$origFileName = $fileName . '_orig' . $this->imgExt;
-		if (copy($this->sourceUrl, $this->targetPath . $origFileName, $this->context)) {
-			$this->sourcePath = $this->targetPath . $origFileName;
-			$this->imgName = $fileName;
-			$this->imgLgUrl = $origFileName;
-			if ($this->imgWebUrl) {
-				$webFileName = $fileName . '_web' . $this->imgExt;
-				if (copy($this->imgWebUrl, $this->targetPath . $webFileName, $this->context)) {
-					$this->imgWebUrl = $webFileName;
-				}
-			}
-			if ($this->imgTnUrl) {
-				$tnFileName = $fileName . '_tn' . $this->imgExt;
-				if (copy($this->imgTnUrl, $this->targetPath . $tnFileName, $this->context)) {
-					$this->imgTnUrl = $tnFileName;
-				}
-			}
-			if ($this->testOrientation) $this->evaluateOrientation();
-			return true;
-		}
-		$this->errArr[] = 'FATAL ERROR: Unable to copy image to target (' . $this->targetPath . $fileName . $this->imgExt . ')';
-		return false;
-	}
+	// TODO (Logan) deprecate function
+	// commenting out as instructed
+	// public function copyImageFromUrl() {
+	// 	//Returns full path
+	// 	if (!$this->sourceUrl) {
+	// 		$this->errArr[] = 'FATAL ERROR: Image source uri NULL in copyImageFromUrl method';
+	// 		//trigger_error('Image source uri NULL in copyImageFromUrl method',E_USER_ERROR);
+	// 		return false;
+	// 	}
+	// 	if (!$this->uriExists($this->sourceUrl)) {
+	// 		$this->errArr[] = 'FATAL ERROR: Image source file (' . $this->sourceUrl . ') does not exist in copyImageFromUrl method';
+	// 		//trigger_error('Image source file ('.$sourceUri.') does not exist in copyImageFromUrl method',E_USER_ERROR);
+	// 		return false;
+	// 	}
+	// 	if (!$this->targetPath) {
+	// 		$this->errArr[] = 'FATAL ERROR: Image target url NULL in copyImageFromUrl method';
+	// 		//trigger_error('Image target url NULL in copyImageFromUrl method',E_USER_ERROR);
+	// 		return false;
+	// 	}
+	// 	if (!file_exists($this->targetPath)) {
+	// 		$this->errArr[] = 'FATAL ERROR: Image target file (' . $this->targetPath . ') does not exist in copyImageFromUrl method';
+	// 		//trigger_error('Image target file ('.$this->targetPath.') does not exist in copyImageFromUrl method',E_USER_ERROR);
+	// 		return false;
+	// 	}
+	// 	//Clean and copy file
+	// 	$fileName = $this->cleanFileName($this->sourceUrl);
+	// 	$origFileName = $fileName . '_orig' . $this->imgExt;
+	// 	if (copy($this->sourceUrl, $this->targetPath . $origFileName, $this->context)) {
+	// 		$this->sourcePath = $this->targetPath . $origFileName;
+	// 		$this->imgName = $fileName;
+	// 		$this->imgLgUrl = $origFileName;
+	// 		if ($this->imgWebUrl) {
+	// 			$webFileName = $fileName . '_web' . $this->imgExt;
+	// 			if (copy($this->imgWebUrl, $this->targetPath . $webFileName, $this->context)) {
+	// 				$this->imgWebUrl = $webFileName;
+	// 			}
+	// 		}
+	// 		if ($this->imgTnUrl) {
+	// 			$tnFileName = $fileName . '_tn' . $this->imgExt;
+	// 			if (copy($this->imgTnUrl, $this->targetPath . $tnFileName, $this->context)) {
+	// 				$this->imgTnUrl = $tnFileName;
+	// 			}
+	// 		}
+	// 		if ($this->testOrientation) $this->evaluateOrientation();
+	// 		return true;
+	// 	}
+	// 	$this->errArr[] = 'FATAL ERROR: Unable to copy image to target (' . $this->targetPath . $fileName . $this->imgExt . ')';
+	// 	return false;
+	// }
 
 	public function parseUrl($url) {
 		$status = false;
@@ -333,68 +337,70 @@ class ImageShared {
 		return true;
 	}
 
-	public function processImage() {
-		if (!$this->imgName) {
-			$this->errArr[] = 'FATAL ERROR: Image file name null in processImage function';
-			//trigger_error('Image file name null in processImage function',E_USER_ERROR);
-			return false;
-		}
-
-		//Create thumbnail
-		if (!$this->imgTnUrl && $this->createThumbnailDerivative) {
-			if ($this->createNewImage('_tn', $this->tnPixWidth, 70)) {
-				$this->imgTnUrl = $this->imgName . '_tn.jpg';
-			}
-		}
-
-		//Get image variable
-		if ((!$this->sourceWidth || !$this->sourceHeight) && ($this->imgExt === 'png' || $this->imgExt === 'jpg')) {
-			list($this->sourceWidth, $this->sourceHeight) =  $this->getImgDim(str_replace(' ', '%20', $this->sourcePath));
-		}
-		$this->setSourceFileSize();
-
-		//Create large image
-		if ($this->mapLargeImg && !$this->imgLgUrl) {
-			if ($this->sourceWidth > ($this->webPixWidth * 1.2) || $this->sourceFileSize > $this->webFileSizeLimit) {
-				//Source image is wide enough can serve as large image, or it's too large to serve as basic web image
-				if (substr($this->sourcePath, 0, 4) == 'http') {
-					$this->imgLgUrl = $this->sourcePath;
-				} else {
-					if ($this->sourceWidth < ($this->lgPixWidth * 1.2)) {
-						//Image width is small enough to serve as large image
-						if (copy($this->sourcePath, $this->targetPath . $this->imgName . '_lg' . $this->imgExt, $this->context)) {
-							$this->imgLgUrl = $this->imgName . '_lg' . $this->imgExt;
-						}
-					} else {
-						if ($this->createNewImage('_lg', $this->lgPixWidth)) {
-							$this->imgLgUrl = $this->imgName . '_lg.jpg';
-						}
-					}
-				}
-			}
-		}
-
-		//Create web url
-		if (!$this->imgWebUrl && $this->createWebDerivative) {
-			if ($this->sourceWidth < ($this->webPixWidth * 1.2) && $this->sourceFileSize < $this->webFileSizeLimit) {
-				//Source image width and file size is small enough to serve as web image
-				if (strtolower(substr($this->sourcePath, 0, 4)) == 'http') {
-					if (copy($this->sourcePath, $this->targetPath . $this->imgName . $this->imgExt, $this->context)) {
-						$this->imgWebUrl = $this->imgName . $this->imgExt;
-					}
-				} elseif ($this->imgLgUrl) $this->imgWebUrl = $this->imgLgUrl;
-				else $this->imgWebUrl = basename($this->sourcePath);
-			} else {
-				//Image width or file size is too large
-				$newWidth = ($this->sourceWidth < ($this->webPixWidth * 1.2) ? $this->sourceWidth : $this->webPixWidth);
-				$this->createNewImage('', $newWidth);
-				$this->imgWebUrl = $this->imgName . '.jpg';
-			}
-		}
-
-		$status = $this->insertImage();
-		return $status;
-	}
+	// TODO (Logan) deprecate function
+	// commenting out as instructed
+	// public function processImage() {
+	// 	if (!$this->imgName) {
+	// 		$this->errArr[] = 'FATAL ERROR: Image file name null in processImage function';
+	// 		//trigger_error('Image file name null in processImage function',E_USER_ERROR);
+	// 		return false;
+	// 	}
+	//
+	// 	//Create thumbnail
+	// 	if (!$this->imgTnUrl && $this->createThumbnailDerivative) {
+	// 		if ($this->createNewImage('_tn', $this->tnPixWidth, 70)) {
+	// 			$this->imgTnUrl = $this->imgName . '_tn.jpg';
+	// 		}
+	// 	}
+	//
+	// 	//Get image variable
+	// 	if ((!$this->sourceWidth || !$this->sourceHeight) && ($this->imgExt === 'png' || $this->imgExt === 'jpg')) {
+	// 		list($this->sourceWidth, $this->sourceHeight) =  $this->getImgDim(str_replace(' ', '%20', $this->sourcePath));
+	// 	}
+	// 	$this->setSourceFileSize();
+	//
+	// 	//Create large image
+	// 	if ($this->mapLargeImg && !$this->imgLgUrl) {
+	// 		if ($this->sourceWidth > ($this->webPixWidth * 1.2) || $this->sourceFileSize > $this->webFileSizeLimit) {
+	// 			//Source image is wide enough can serve as large image, or it's too large to serve as basic web image
+	// 			if (substr($this->sourcePath, 0, 4) == 'http') {
+	// 				$this->imgLgUrl = $this->sourcePath;
+	// 			} else {
+	// 				if ($this->sourceWidth < ($this->lgPixWidth * 1.2)) {
+	// 					//Image width is small enough to serve as large image
+	// 					if (copy($this->sourcePath, $this->targetPath . $this->imgName . '_lg' . $this->imgExt, $this->context)) {
+	// 						$this->imgLgUrl = $this->imgName . '_lg' . $this->imgExt;
+	// 					}
+	// 				} else {
+	// 					if ($this->createNewImage('_lg', $this->lgPixWidth)) {
+	// 						$this->imgLgUrl = $this->imgName . '_lg.jpg';
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	//
+	// 	//Create web url
+	// 	if (!$this->imgWebUrl && $this->createWebDerivative) {
+	// 		if ($this->sourceWidth < ($this->webPixWidth * 1.2) && $this->sourceFileSize < $this->webFileSizeLimit) {
+	// 			//Source image width and file size is small enough to serve as web image
+	// 			if (strtolower(substr($this->sourcePath, 0, 4)) == 'http') {
+	// 				if (copy($this->sourcePath, $this->targetPath . $this->imgName . $this->imgExt, $this->context)) {
+	// 					$this->imgWebUrl = $this->imgName . $this->imgExt;
+	// 				}
+	// 			} elseif ($this->imgLgUrl) $this->imgWebUrl = $this->imgLgUrl;
+	// 			else $this->imgWebUrl = basename($this->sourcePath);
+	// 		} else {
+	// 			//Image width or file size is too large
+	// 			$newWidth = ($this->sourceWidth < ($this->webPixWidth * 1.2) ? $this->sourceWidth : $this->webPixWidth);
+	// 			$this->createNewImage('', $newWidth);
+	// 			$this->imgWebUrl = $this->imgName . '.jpg';
+	// 		}
+	// 	}
+	//
+	// 	$status = $this->insertImage();
+	// 	return $status;
+	// }
 
 	public function createNewImage($subExt, $targetWidth, $qualityRating = 0, $targetPathOverride = '') {
 		global $USE_IMAGE_MAGICK;
@@ -1072,116 +1078,54 @@ class ImageShared {
 		return $exists;
 	}
 
-	public static function getImgDim($imgUrl) {
-		if (!$imgUrl) return false;
-		$imgDim = false;
-
-		$urlPrefix = 'http://';
-		if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) $urlPrefix = 'https://';
-		$urlPrefix .= $_SERVER['SERVER_NAME'];
-		if ($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) $urlPrefix .= ':' . $_SERVER['SERVER_PORT'];
-
-		if (strpos($imgUrl, $urlPrefix . $GLOBALS['MEDIA_ROOT_URL']) === 0) {
-			$imgUrl = substr($imgUrl, strlen($urlPrefix));
-		}
-		if (substr($imgUrl, 0, 1) == '/') {
-			if ($GLOBALS['MEDIA_ROOT_URL'] && strpos($imgUrl, $GLOBALS['MEDIA_ROOT_URL']) === 0) {
-				$imgUrl = str_replace($GLOBALS['MEDIA_ROOT_URL'], $GLOBALS['MEDIA_ROOT_PATH'], $imgUrl);
-			}
-			$imgDim = @getimagesize($imgUrl);
-		}
-		if (!$imgDim) {
-			$imgDim = self::getImgDim1($imgUrl);
-			if (!$imgDim) $imgDim = self::getImgDim2($imgUrl);
-			if (!$imgDim) $imgDim = @getimagesize($imgUrl);
-		}
-		return $imgDim;
-	}
-
-	// Retrieve JPEG width and height without downloading/reading entire image.
-	private static function getImgDim1($imgUrl) {
-		$opts = array(
-			'http' => array(
-				'user_agent' => $GLOBALS['DEFAULT_TITLE'],
-				'method' => "GET",
-				'header' => implode("\r\n", array('Content-type: text/plain;'))
-			),
-			'ssl' => array(
-				'verify_peer' => false,
-				'verify_peer_name' => false,
-			)
-		);
-		$context = stream_context_create($opts);
-		if ($handle = fopen($imgUrl, "rb", false, $context)) {
-			$new_block = NULL;
-			if (!feof($handle)) {
-				$new_block = fread($handle, 32);
-				$i = 0;
-				if ($new_block[$i] == "\xFF" && $new_block[$i + 1] == "\xD8" && $new_block[$i + 2] == "\xFF" && $new_block[$i + 3] == "\xE0") {
-					$i += 4;
-					if ($new_block[$i + 2] == "\x4A" && $new_block[$i + 3] == "\x46" && $new_block[$i + 4] == "\x49" && $new_block[$i + 5] == "\x46" && $new_block[$i + 6] == "\x00") {
-						// Read block size and skip ahead to begin cycling through blocks in search of SOF marker
-						$block_size = unpack("H*", $new_block[$i] . $new_block[$i + 1]);
-						$block_size = hexdec($block_size[1]);
-						while (!feof($handle)) {
-							$i += $block_size;
-							if (!$block_size) return false;
-							$new_block .= fread($handle, $block_size);
-							if (isset($new_block[$i]) && $new_block[$i] == "\xFF") {
-								// New block detected, check for SOF marker
-								$sof_marker = array("\xC0", "\xC1", "\xC2", "\xC3", "\xC5", "\xC6", "\xC7", "\xC8", "\xC9", "\xCA", "\xCB", "\xCD", "\xCE", "\xCF");
-								if (in_array($new_block[$i + 1], $sof_marker)) {
-									// SOF marker detected. Width and height information is contained in bytes 4-7 after this byte.
-									//$size_data = $new_block[$i+2] . $new_block[$i+3] . $new_block[$i+4] . $new_block[$i+5] . $new_block[$i+6] . $new_block[$i+7] . $new_block[$i+8];
-									$size_data = null;
-									for ($x = 2; $x < 9; $x++) {
-										if (isset($new_block[$i + $x])) $size_data .= $new_block[$i + $x];
-									}
-									$unpacked = unpack("H*", $size_data);
-									$unpacked = $unpacked[1];
-									if (!is_array($unpacked) || count($unpacked) < 13) return false;
-									$height = hexdec($unpacked[6] . $unpacked[7] . $unpacked[8] . $unpacked[9]);
-									$width = hexdec($unpacked[10] . $unpacked[11] . $unpacked[12] . $unpacked[13]);
-									return array($width, $height);
-								} else {
-									// Skip block marker and read block size
-									$i += 2;
-									$block_size = unpack("H*", $new_block[$i] . $new_block[$i + 1]);
-									$block_size = hexdec($block_size[1]);
-								}
-							} else {
-								return FALSE;
-							}
-						}
-					}
-				}
+	public static function getImgDim($imgPath) {
+		if(stripos($imgPath, 'http') === 0){
+			$urlPrefix = 'http://';
+			if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) $urlPrefix = 'https://';
+			$urlPrefix .= $_SERVER['SERVER_NAME'];
+			if ($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) $urlPrefix .= ':' . $_SERVER['SERVER_PORT'];
+			if (strpos($imgPath, $urlPrefix . $GLOBALS['MEDIA_ROOT_URL']) === 0) {
+				//Input is a URL of a local image, thus remove domain so that we can more efficiently access the file locally
+				$imgPath = substr($imgPath, strlen($urlPrefix));
 			}
 		}
-		return FALSE;
-	}
+		if (substr($imgPath, 0, 1) == '/') {
+			if ($GLOBALS['MEDIA_ROOT_URL'] && strpos($imgPath, $GLOBALS['MEDIA_ROOT_URL']) === 0) {
+				//Path is a locally accessible file, but with a web path defined, thus we need to convert to media root path
+				$imgPath = str_replace($GLOBALS['MEDIA_ROOT_URL'], $GLOBALS['MEDIA_ROOT_PATH'], $imgPath);
+			}
+		}
 
-	private static function getImgDim2($imgUrl) {
-		$curl = curl_init($imgUrl);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array("Range: bytes=0-65536"));
-		//curl_setopt($curl, CURLOPT_HTTPHEADER, array( "Range: bytes=0-32768" ));
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36');
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+		// Local file
+		if (is_file($imgPath)) {
+			return @getimagesize($imgPath);
+		}
+
+		// Remote URL
+		$curl = curl_init($imgPath);
+		curl_setopt_array($curl, [
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_TIMEOUT => 5,
+			CURLOPT_CONNECTTIMEOUT => 3,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_USERAGENT => $GLOBALS['DEFAULT_TITLE'],
+			CURLOPT_RANGE => '0-65535'
+		]);
+
 		$data = curl_exec($curl);
-		curl_close($curl);
-		$width = 0;
-		$height = 0;
-
-		$im = @imagecreatefromstring($data);
-		if ($im) {
-			$width = @imagesx($im);
-			$height = @imagesy($im);
-			imagedestroy($im);
+		if ($data === false) {
+			curl_close($curl);
+			return false;
 		}
-		if (!$width || !$height) return false;
-		return array($width, $height);
+
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		curl_close($curl);
+		if ($httpCode >= 400) {
+			return false;
+		}
+
+		return @getimagesizefromstring($data);
 	}
 
 	private function cleanInStr($str) {

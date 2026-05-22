@@ -25,10 +25,10 @@ class PluginsManager extends Manager {
 		return $showHtml;
 	}
 
-	public function initiateSlideShow($ssid,$numSlides,$numDays,$imageType,$clid,$dayInterval){
+	private function initiateSlideShow($ssid,$numSlides,$numDays,$imageType,$clid,$dayInterval){
 		global $SERVER_ROOT;
-		$previousFile = $SERVER_ROOT.'/temp/slideshow/'.$ssid.'_previous.json';
-		$infoFile = $SERVER_ROOT.'/temp/slideshow/'.$ssid.'_info.json';
+		$previousFile = $SERVER_ROOT.'/content/slideshow/'.$ssid.'_previous.json';
+		$infoFile = $SERVER_ROOT.'/content/slideshow/'.$ssid.'_info.json';
 		$currentDate = date("Y-m-d");
 		$replace = false;
 		$lastCLID = '';
@@ -155,17 +155,19 @@ class PluginsManager extends Manager {
 
 			//Save data to slideshow history/configuration files
 			if($clid){
-				$fp = fopen($previousFile, 'w');
-				fwrite($fp, json_encode($previousArr));
+				if($fp = fopen($previousFile, 'w')){
+					fwrite($fp, json_encode($previousArr));
+					fclose($fp);
+				}
+			}
+			if($fp = fopen($infoFile, 'w')){
+				fwrite($fp, json_encode($ssIdInfo));
 				fclose($fp);
 			}
-			$fp = fopen($infoFile, 'w');
-			fwrite($fp, json_encode($ssIdInfo));
-			fclose($fp);
 		}
 	}
 
-	public function getSlideshowStyle($width){
+	private function getSlideshowStyle($width){
 		$html = '<link rel="stylesheet" href="' . htmlspecialchars($GLOBALS['CLIENT_ROOT'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '/css/slideshowstyle.css">
 			<style>
 				@font-face{
@@ -198,7 +200,7 @@ class PluginsManager extends Manager {
 		return $html;
 	}
 
-	public function getSlideshowScript($width,$interval){
+	private function getSlideshowScript($width,$interval){
 		$html = '<script type="text/javascript">
 				$(function() {
 					$("#slides").slidesjs({
@@ -216,9 +218,9 @@ class PluginsManager extends Manager {
 		return $html;
 	}
 
-	public function getImageList($ssid){
+	private function getImageList($ssid){
 		global $LANG;
-		$infoArr = json_decode(file_get_contents($GLOBALS['SERVER_ROOT'].'/temp/slideshow/'.$ssid.'_info.json'), true);
+		$infoArr = json_decode(file_get_contents($GLOBALS['SERVER_ROOT'].'/content/slideshow/'.$ssid.'_info.json'), true);
 		//echo json_encode($infoArr);
 		$imageArr = $infoArr['files'];
 		$html = '';
@@ -236,7 +238,7 @@ class PluginsManager extends Manager {
 			$hideCaptionClick = "$('.slideshowCaptionDiv').hide();$('.slideshowShowLink').show();return false;";
 			$html .= '<div class="slideshowBaseDiv">
 				<div class="slideshowCaptionDiv">
-					<a class="slideshowHideLink" href="#" onclick="' . $hideCaptionClick . '">' . htmlspecialchars((isset($LANG['HIDE_CAPTION'])?$LANG['HIDE_CAPTION']:'HIDE CAPTION'), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '</a>';
+					<a class="slideshowHideLink" href="#" onclick="' . $hideCaptionClick . '">' . (isset($LANG['HIDE_CAPTION'])?$LANG['HIDE_CAPTION']:'HIDE CAPTION') . '</a>';
 			$html .= '<div class="slideshowCitationDiv">';
 			if($imgIdArr["sciname"] || $imgIdArr["identifier"]){
 				$html .= '<a href="' . htmlspecialchars($linkUrl, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '" target="_blank">' . htmlspecialchars(($imgIdArr["identifier"]?$imgIdArr["identifier"]:$imgIdArr["sciname"]), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '</a>. ';
